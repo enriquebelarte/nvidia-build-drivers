@@ -20,9 +20,7 @@ RUN export KVER=$(echo ${KERNEL_VERSION} | cut -d '-' -f 1) \
         git clone -b ${DRIVER_VERSION}  https://github.com/NVIDIA/open-gpu-kernel-modules.git && \
         cd open-gpu-kernel-modules && \
         make SYSSRC=${KERNEL_SOURCES} SYSOUT=${KERNEL_OUTPUT} modules && \
-	find "/home/builder/opengpu-kernel-modules/kernel-open" -type f -name "*ko" \
-	-exec cp --parents {} "/tmp/drivers" \;
 
 
 FROM scratch
-COPY --from=builder /tmp/drivers /drivers
+COPY --from=builder /home/builder/open-gpu-kernel-modules/kernel-open/*.ko /drivers

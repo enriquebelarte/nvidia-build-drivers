@@ -1,4 +1,4 @@
-FROM registry.distributed-ci.io/dtk/driver-toolkit:5.14.0-284.51.1.el9_2 
+FROM registry.distributed-ci.io/dtk/driver-toolkit:5.14.0-284.51.1.el9_2 as builder 
 
 ARG ARCH='x86_64'
 ARG DRIVER_VERSION='535.104.05'
@@ -19,4 +19,12 @@ RUN export KVER=$(echo ${KERNEL_VERSION} | cut -d '-' -f 1) \
         KSOURCES=$(echo ${KERNEL_VERSION}.${ARCH}) && \
         git clone -b ${DRIVER_VERSION}  https://github.com/NVIDIA/open-gpu-kernel-modules.git && \
         cd open-gpu-kernel-modules && \
-        make SYSSRC=${KERNEL_SOURCES} SYSOUT=${KERNEL_OUTPUT} modules
+        make SYSSRC=${KERNEL_SOURCES} SYSOUT=${KERNEL_OUTPUT} modules && \
+	mkdir -p /drivers && \
+	find "/home/builder/opengpu-kernel-modules/kernel-open" -type f -name "*ko" \
+	-exec cp --parents {} "/drivers" \;
+
+
+FROM scratch
+COPY --from=builder /drivers /drivers
+COPY --FROM=builder /home/builder/

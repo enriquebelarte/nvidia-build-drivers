@@ -27,4 +27,3 @@ RUN export KVER=$(echo ${KERNEL_VERSION} | cut -d '-' -f 1) \
 
 FROM scratch
 COPY --from=builder /drivers /drivers
-COPY --FROM=builder /home/builder/

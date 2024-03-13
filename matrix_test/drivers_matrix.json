@@ -1,0 +1,84 @@
+{
+  "drivers_matrix": [
+    {
+      "release_version": "550.54.14",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "550.54.14",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.161.07",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.161.07",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.154.05",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.154.05",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.129.03",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.129.03",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.104.12",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.104.12",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.104.05",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.104.05",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.86.10",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.86.10",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.54.03",
+      "kernel_version": "5.14.0-284.35.1.el9_2",
+      "image_published": "n"
+    },
+    {
+      "release_version": "535.54.03",
+      "kernel_version": "5.14.0-284.57.1.el9_2",
+      "image_published": "n"
+    }
+  ]
+}

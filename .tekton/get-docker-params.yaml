@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: extract-dtk-args
+spec:
+  params:
+    - name: dockerfilePath
+      description: Path to the Dockerfile
+      type: string
+  steps:
+    - name: extract-args
+      image: alpine:3
+      command: [sh, -c]
+      args:
+        - |
+          DRIVER_VERSION=$(grep -o 'ENV DRIVER_VERSION=.*' $(params.dockerfilePath) | cut -d= -f2)
+          KERNEL_VERSION=$(grep -o 'ENV KERNEL_VERSION=.*' $(params.dockerfilePath) | cut -d= -f2)
+          echo $DRIVER_VERSION"\n"$KERNEL_VERSION > extracted_tag.txt
+      workingDir: /workspace
+  results:
+    - name: output
+      description: The extracted tag
+      path: extracted_tag.txt

@@ -194,6 +194,19 @@ spec:
       workspaces:
       - name: source
         workspace: workspace
+    - name: extract-dtk-args
+      runAfter:
+      - clone-repository
+      taskRef:
+        params:
+        - name: name
+          value: extract-dtk-args 
+        - name: kind
+          value: task
+        resolver: git 
+      workspaces:
+      - name: source
+        workspace: workspace
     - name: build-container
       params:
       - name: IMAGE

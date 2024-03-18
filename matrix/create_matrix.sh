@@ -39,8 +39,6 @@ release_versions+=("$release_versions_prod")
 
 done <<< "$kernel_versions"
 
-# Delete previous matrix if exists before creating the new one
-rm -f drivers_matrix.json
 
 # Iterate over modified release versions and add "published" field
 for release_info in "${release_versions[@]}"; do
@@ -48,6 +46,11 @@ for release_info in "${release_versions[@]}"; do
     published=$(check_image_exists "$image_url")
     modified_release_info=$(echo "$release_info" | jq --arg published "$published" '. + {published: $published}')
     # Delete previous matrix if exists before creating the new one
-    echo "$modified_release_info" >> drivers_matrix.json
+    echo "$modified_release_info" >> tmp_matrix
     md5sum drivers_matrix.json > drivers_matrix.MD5SUM 
 done
+# Format a whole JSON for later process
+cat tmp_matrix | jq -sc '.' > drivers_matrix.json
+md5sum drivers_matrix.json > drivers_matrix.MD5SUM
+rm tmp_matrix
+

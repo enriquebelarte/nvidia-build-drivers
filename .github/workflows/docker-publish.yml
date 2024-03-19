@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run script
+        working-directory: matrix
         run: |
-          sh ./matrix/create_matrix.sh
-          sh ./matrix/update_dockerfile.sh
+          bash create_matrix.sh
+          bash update_dockerfile.sh

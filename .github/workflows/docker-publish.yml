@@ -17,4 +17,5 @@ jobs:
 
       - name: Run script
         run: |
+          sh ./matrix/create_matrix.sh
           sh ./matrix/update_dockerfile.sh

@@ -210,6 +210,8 @@ spec:
           value: main
         - name: pathInRepo
           value: .tekton/get-docker-params.yaml
+        - name: dockerfilePath
+          value: Dockerfile 
         workspaces:
         - name: source
           workspace: workspace

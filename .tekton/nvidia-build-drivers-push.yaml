@@ -198,6 +198,7 @@ spec:
       runAfter:
       - clone-repository
       taskRef:
+        resolver: git
         params:
         - name: name
           value: extract-dtk-args 
@@ -209,11 +210,9 @@ spec:
           value: main
         - name: pathInRepo
           value: .tekton/get-docker-params.yaml
-
-        resolver: git
         workspaces:
-      - name: source
-        workspace: workspace
+        - name: source
+          workspace: workspace
     - name: build-container
       params:
       - name: IMAGE

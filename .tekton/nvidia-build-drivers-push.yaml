@@ -203,13 +203,14 @@ spec:
           value: extract-dtk-args 
         - name: kind
           value: task
-        resolver: git
         - name: url
-          value: https://github.com/enriquebelarte/nvidia-build-drivers.git 
+          value: https://github.com/enriquebelarte/nvidia-build-drivers.git
         - name: revision
           value: main
         - name: pathInRepo
-          value: .tekton/get-docker-params.yaml 
+          value: .tekton/get-docker-params.yaml
+
+        resolver: git
         workspaces:
       - name: source
         workspace: workspace

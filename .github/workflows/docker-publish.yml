@@ -3,10 +3,10 @@ name: Run Script on File Change
 on:
   push:
     paths:
-      - './matrix/drivers_matrix.MD5SUM'
+      - 'matrix/drivers_matrix.MD5SUM'
   pull_request:
     paths:
-      - './matrix/drivers_matrix.MD5SUM' 
+      - 'matrix/drivers_matrix.MD5SUM' 
 
 jobs:
   run_script:

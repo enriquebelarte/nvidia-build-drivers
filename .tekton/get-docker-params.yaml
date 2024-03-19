@@ -14,7 +14,7 @@ spec:
       command: [sh, -c]
       args:
         - |
-          ls -l
+          ls -l /
           DRIVER_VERSION=$(grep -o 'ENV DRIVER_VERSION=.*' $(params.dockerfilePath) | cut -d= -f2)
           KERNEL_VERSION=$(grep -o 'ENV KERNEL_VERSION=.*' $(params.dockerfilePath) | cut -d= -f2)
           echo $DRIVER_VERSION"\n"$KERNEL_VERSION > extracted_tag.txt

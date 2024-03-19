@@ -1,9 +1,8 @@
 #!/bin/bash
 #set -x
 # Set the image driver name and the registry
-driver_name="nvidia"
+driver_name="nvidia-build-drivers"
 registry="quay.io/ebelarte"
-
 # Read the original JSON with type LTS or Production 
 releases_json_lts=$(cat releases.json | jq -r '.[] | select(.type == "lts branch")')
 releases_json_prod=$(cat releases.json | jq -r '.[] | select(.type == "production branch")')
@@ -28,10 +27,10 @@ release_versions=()
 # Loop over data and create JSON matrix
 while IFS= read -r kernel_version; do
 # Extract LTS releases <3 years
-release_versions_lts=$(echo "$releases_json_lts" | jq -r --arg kernel_version "$kernel_version" --arg registry "$registry" --arg driver_name "$driver_name" '.driver_info[] | select((.release_date | strptime("%Y-%m-%d") | mktime) > (now - (3 * 365 * 24 * 60 * 60))) | {release_version: .release_version, release_date: .release_date, kernel_version: $kernel_version, image: "\($registry)/\($driver_name)-\(.release_version):\($kernel_version)"}')
+release_versions_lts=$(echo "$releases_json_lts" | jq -r --arg kernel_version "$kernel_version" --arg registry "$registry" --arg driver_name "$driver_name" '.driver_info[] | select((.release_date | strptime("%Y-%m-%d") | mktime) > (now - (3 * 365 * 24 * 60 * 60))) | {release_version: .release_version, release_date: .release_date, kernel_version: $kernel_version, image: "\($registry)/\($driver_name):\(.release_version)-\($kernel_version)"}')
 
 # Extract production releases < 1 year
-release_versions_prod=$(echo "$releases_json_prod" | jq -r --arg kernel_version "$kernel_version" --arg registry "$registry" --arg driver_name "$driver_name" '.driver_info[] | select((.release_date | strptime("%Y-%m-%d") | mktime) > (now - (1 * 365 * 24 * 60 * 60))) | {release_version: .release_version, release_date: .release_date, kernel_version: $kernel_version, image: "\($registry)/\($driver_name)-\(.release_version):\($kernel_version)"}')
+release_versions_prod=$(echo "$releases_json_prod" | jq -r --arg kernel_version "$kernel_version" --arg registry "$registry" --arg driver_name "$driver_name" '.driver_info[] | select((.release_date | strptime("%Y-%m-%d") | mktime) > (now - (1 * 365 * 24 * 60 * 60))) | {release_version: .release_version, release_date: .release_date, kernel_version: $kernel_version, image: "\($registry)/\($driver_name):\(.release_version)-\($kernel_version)"}')
 
 # Add versions to array
 release_versions+=("$release_versions_lts")

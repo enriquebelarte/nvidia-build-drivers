@@ -7,7 +7,7 @@ spec:
     - name: dockerfilePath
       description: Path to the Dockerfile
       type: string
-      default: Dockerfile
+      value: "Dockerfile"
   steps:
     - name: extract-args
       image: alpine:3

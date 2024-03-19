@@ -195,6 +195,9 @@ spec:
       - name: source
         workspace: workspace
     - name: extract-dtk-args
+      params:
+      - name: dockerfilePath
+        value: $(params.dockerfile)  
       runAfter:
       - clone-repository
       taskRef:
@@ -210,8 +213,6 @@ spec:
           value: main
         - name: pathInRepo
           value: .tekton/get-docker-params.yaml
-        - name: dockerfilePath
-          value: Dockerfile 
         workspaces:
         - name: source
           workspace: workspace

@@ -32,3 +32,10 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check All Previous Steps worked
+        id: check_status
+        run: echo ::set-output name=status::success
+
+      - name: Go to Konflux App if it worked
+        if: steps.check_status.outputs.status == 'success'

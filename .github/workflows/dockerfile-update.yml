@@ -1,27 +1,36 @@
 name: Run Script on File Change
 
 on:
-  push:
-    paths:
-      - 'matrix/drivers_matrix.MD5SUM'
-  pull_request:
-    paths:
-      - 'matrix/drivers_matrix.MD5SUM' 
+  schedule:
+    - cron: "*/10 * * * *"
 
 jobs:
-  run_script:
+  check_changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run script
+      - name: Check for changes
+        id: file_changes
+        run: |
+          if git diff --quiet matrix/drivers_matrix.MD5SUM; then
+            echo "No changes detected in the file."
+            echo "::set-output name=changed::false"
+          else
+            echo "Changes detected in the file."
+            echo "::set-output name=changed::true"
+          fi
+
+      - name: Run if changes
+        if: steps.file_changes.outputs.changed == 'true'
         working-directory: matrix
         run: |
           bash create_matrix.sh
           bash update_dockerfile.sh
 
       - name: Commit changes
+        if: steps.file_changes.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "actions-user"
@@ -29,6 +38,7 @@ jobs:
           git commit -m "[NEW_BUILD] New release via GitHub Action"
 
       - name: Push changes
+        if: steps.file_changes.outputs.changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

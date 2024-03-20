@@ -1,7 +1,7 @@
 FROM registry.distributed-ci.io/dtk/driver-toolkit:5.14.0-284.51.1.el9_2 as builder
 
 ARG ARCH='x86_64'
-ARG DRIVER_VERSION='535.161.07'
+ARG DRIVER_VERSION='535.154.05'
 ARG DRIVER_EPOCH='1'
 ARG KERNEL_VERSION='5.14.0-284.51.1.el9_2'
 ARG RHEL_VERSION='9.2'

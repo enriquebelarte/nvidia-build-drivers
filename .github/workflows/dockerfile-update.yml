@@ -20,3 +20,15 @@ jobs:
         run: |
           bash create_matrix.sh
           bash update_dockerfile.sh
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update Dockerfile for new release via GitHub Action"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

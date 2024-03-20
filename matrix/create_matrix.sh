@@ -1,5 +1,9 @@
 #!/bin/bash
+# Add a logfile for debugging
+#exec 19>logfile
+#BASH_XTRACEFD=19
 #set -x
+
 # Set the image driver name and the registry
 driver_name="nvidia-build-drivers"
 registry="quay.io/ebelarte"
@@ -10,16 +14,6 @@ releases_json_prod=$(cat releases.json | jq -r '.[] | select(.type == "productio
 # Read the JSON with available kernel_versions
 kernel_versions_json=$(cat kernel_versions.json)
 kernel_versions=$(echo "$kernel_versions_json" | jq -r '.Tags[] | select(startswith("5"))')
-
-# Function to check if image exists
-check_image_exists() {
-    local image_url=$1
-    if skopeo inspect docker://"$image_url" &> /dev/null; then
-        echo "y"
-    else
-        echo "n"
-    fi
-}
 
 # Array to store all releases
 release_versions=()
@@ -38,17 +32,26 @@ release_versions+=("$release_versions_prod")
 
 done <<< "$kernel_versions"
 
-
-# Iterate over modified release versions and add "published" field
-for release_info in "${release_versions[@]}"; do
-    image_url=$(echo "$release_info" | jq -r '.image')
+# Function to check if image exists
+check_image_exists() {
+    local image_url=$1
+    if skopeo inspect docker://"$image_url" &> /dev/null; then
+        echo "y" 
+    else
+        echo "n"
+    fi
+}
+release_matrix=$(echo "${release_versions[@]}" | jq -sc '.')
+# Iterate over modified release versions and add "published" field if needed
+for release in $(echo "${release_matrix}" | jq -c '.[]'); do
+    #echo "$release" | jq -r 'to_entries | .[] | "\(.key): \(.value)"'
+    image_url=$(echo "$release" | jq -r '.image')
     published=$(check_image_exists "$image_url")
-    modified_release_info=$(echo "$release_info" | jq --arg published "$published" '. + {published: $published}')
-    # Delete previous matrix if exists before creating the new one
+    modified_release_info=$(echo "$release" | jq --arg published "$published" '. + {published: $published}')    
     echo "$modified_release_info" >> tmp_matrix
-    md5sum drivers_matrix.json > drivers_matrix.MD5SUM 
 done
-# Format a whole JSON for later process
+
+# Format a whole JSON for later process 
 cat tmp_matrix | jq -sc '.' > drivers_matrix.json
 md5sum drivers_matrix.json > drivers_matrix.MD5SUM
 rm tmp_matrix

@@ -24,7 +24,7 @@ jobs:
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.name "actions-user"
           git add .
           git commit -m "Update Dockerfile for new release via GitHub Action"
 

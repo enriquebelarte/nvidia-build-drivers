@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Read contents of MD5SUM in repository
         id: read-repo-file
-        run: echo "::set-output name=content::$(cat drivers_matrix.MD5SUM)"
+        run: echo "md5_repo=$(cat drivers_matrix.MD5SUM)" >> "$GITHUB_ENV"
         working-directory: matrix
       - name: Run matrix
         id: run-matrix
@@ -19,20 +19,14 @@ jobs:
         run: |
           bash create_matrix.sh
           bash update_dockerfile.sh
-          echo "::set-output name=content::$(cat drivers_matrix.MD5SUM)"
-      - name: Compare files
-        id: file-diff
+          echo "md5_live=$(cat drivers_matrix.MD5SUM)" >> "$GITHUB_ENV"
+      - name: Show differences
+        id: show-diffs
         run: |
-          generated_content=$(cat matrix/drivers_matrix.MD5SUM)
-          if [ "${{ steps.run-matrix.outputs.content }}" = "${{ steps.read-repo-file.outputs.content }}" ]; then
-            echo "Files are identical. No changes to do"
-            exit 0
-          else
-            echo "::set-output name=md5_results::different"
-            echo "Files are different"
-            echo "Original ${{ steps.read-repo-file.outputs.content }}"
-            echo "New ${{ steps.run-matrix.outputs.content }}"
-          fi
+          echo "MD5 REPO:"
+          printf '%s\n' "$md5_repo" 
+          echo "MD5 LIVE:"
+          printf '%s\n' "$md5_live" 
       - name: Commit changes
         if: steps.set-var.outputs.md5_results == 'different'
         run: |

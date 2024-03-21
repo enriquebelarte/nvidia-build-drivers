@@ -7,12 +7,13 @@
 # Set the image driver name and the registry
 driver_name="nvidia-build-drivers"
 registry="quay.io/ebelarte"
+matrix_dir="/matrix/"
 # Read the original JSON with type LTS or Production 
-releases_json_lts=$(cat releases.json | jq -r '.[] | select(.type == "lts branch")')
-releases_json_prod=$(cat releases.json | jq -r '.[] | select(.type == "production branch")')
+releases_json_lts=$(cat "$matrix_dir"releases.json | jq -r '.[] | select(.type == "lts branch")')
+releases_json_prod=$(cat "$matrix_dir"releases.json | jq -r '.[] | select(.type == "production branch")')
 
 # Read the JSON with available kernel_versions
-kernel_versions_json=$(cat kernel_versions.json)
+kernel_versions_json=$(cat "$matrix_dir"kernel_versions.json)
 kernel_versions=$(echo "$kernel_versions_json" | jq -r '.Tags[] | select(startswith("5"))')
 
 # Array to store all releases
@@ -52,7 +53,7 @@ for release in $(echo "${release_matrix}" | jq -c '.[]'); do
 done
 
 # Format a whole JSON for later process 
-cat tmp_matrix | jq -sc '.' > drivers_matrix.json
-md5sum drivers_matrix.json > drivers_matrix.MD5SUM
+cat tmp_matrix | jq -sc '.' > "$matrix_dir"drivers_matrix.json
+md5sum drivers_matrix.json > "$matrix_dir"drivers_matrix.MD5SUM
 rm tmp_matrix
 

@@ -2,7 +2,7 @@ name: Run Script on File Change
 
 on:
   schedule:
-    - cron: "* */8 * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   check_changes:

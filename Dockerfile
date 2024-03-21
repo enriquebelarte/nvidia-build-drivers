@@ -1,9 +1,9 @@
-FROM registry.distributed-ci.io/dtk/driver-toolkit:5.14.0-284.57.1.el9_2 as builder
+FROM registry.distributed-ci.io/dtk/driver-toolkit: as builder
 
 ARG ARCH='x86_64'
-ARG DRIVER_VERSION='550.54.14'
+ARG DRIVER_VERSION=''
 ARG DRIVER_EPOCH='1'
-ARG KERNEL_VERSION='5.14.0-284.57.1.el9_2'
+ARG KERNEL_VERSION=''
 ARG RHEL_VERSION='9.2'
 ARG KERNEL_SOURCES='/usr/src/kernels/${KERNEL_VERSION}.${ARCH}'
 ARG KERNEL_OUTPUT='/usr/src/kernels/${KERNEL_VERSION}.${ARCH}'

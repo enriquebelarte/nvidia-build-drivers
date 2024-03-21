@@ -11,25 +11,26 @@ jobs:
         uses: actions/checkout@v2
       - name: Read contents of MD5SUM in repository
         id: read-repo-file
-        run: echo "::set-output name=content::$(cat matrix/drivers_matrix.MD5SUM)"
+        run: echo "::set-output name=content::$(cat drivers_matrix.MD5SUM)"
         working-directory: matrix
-      - name: Run matrix 
+      - name: Run matrix
+        id: run-matrix
         working-directory: matrix
         run: |
           bash create_matrix.sh
           bash update_dockerfile.sh
-
+          echo "::set-output name=content::$(cat drivers_matrix.MD5SUM)"
       - name: Compare files
         id: file-diff
         run: |
           generated_content=$(cat matrix/drivers_matrix.MD5SUM)
-          if [ "$generated_content" = "${{ steps.read-repo-file.outputs.content }}" ]; then
+          if [ "${{ steps.run-matrix.outputs.content }}" = "${{ steps.read-repo-file.outputs.content }}" ]; then
             echo "Files are identical"
             exit 0
           else
             echo "Files are different"
             echo "Original ${{ steps.read-repo-file.outputs.content }}"
-            echo "Nuevo $generated_content"
+            echo "Nuevo ${{ steps.run-matrix.outputs.content }}"
             exit 1
           fi
       - name: Commit changes

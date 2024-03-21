@@ -1,8 +1,8 @@
-name: Check for data changes
+name: Run Script on File Change
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "* */8 * * *"
 
 jobs:
   check_changes:
@@ -17,19 +17,19 @@ jobs:
           bash create_matrix.sh
           bash update_dockerfile.sh
 
-      - name: Compare files
-        id: file-diff
+      - name: Check for changes
+        id: file_changes
         run: |
-          if cmp -s "drivers_matrix.MD5SUM" "matrix/drivers_matrix.MD5SUM"; then
-            echo "Files are identical"
-            exit 0
+          if git diff --quiet matrix/drivers_matrix.MD5SUM; then
+            echo "No changes detected in the file."
+            echo "::set-output name=changed::false"
           else
-            echo "Files are different"
-            exit 1
+            echo "Changes detected in the file."
+            echo "::set-output name=changed::true"
           fi
 
       - name: Commit changes
-        if: steps.file-diff.outcome == 'failure'
+        if: steps.file_changes.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "actions-user"
@@ -37,7 +37,7 @@ jobs:
           git commit -m "[NEW_BUILD] New release via GitHub Action"
 
       - name: Push changes
-        if: steps.file-diff.outcome == 'failure'
+        if: steps.file_changes.outputs.changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

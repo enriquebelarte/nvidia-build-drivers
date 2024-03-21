@@ -23,19 +23,25 @@ jobs:
       - name: Show differences
         id: show-diffs
         run: |
+
           echo "MD5 REPO:"
           printf '%s\n' "$md5_repo" 
           echo "MD5 LIVE:"
           printf '%s\n' "$md5_live" 
       - name: Commit changes
-        if: steps.set-var.outputs.md5_results == 'different'
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "actions-user"
-          git add .
-          git commit -m "[NEW_BUILD] New release via GitHub Action"
+          if [ "$md5_repo" != "$md5_live" ]; then
+            echo "md5_changed=true" >> "$GITHUB_ENV"
+            git config --local user.email "action@github.com"
+            git config --local user.name "actions-user"
+            git add .
+            git commit -m "[NEW_BUILD] New release via GitHub Action"
+          else
+            echo "md5_changed=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
       - name: Push changes
-        if: steps.set-var.outputs.md5_results == 'different'
+        if: env.md5_changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

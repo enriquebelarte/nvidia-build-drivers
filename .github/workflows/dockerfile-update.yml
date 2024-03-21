@@ -22,6 +22,10 @@ jobs:
             exit 0
           else
             echo "Files are different"
+            echo "Original : "
+            cat matrix/drivers_matrix.MD5SUM
+            echo "Nuevo :"
+            cat drivers_matrix.MD5SUM
             exit 1
           fi
       - name: Commit changes

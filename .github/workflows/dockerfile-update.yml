@@ -25,23 +25,23 @@ jobs:
         run: |
           generated_content=$(cat matrix/drivers_matrix.MD5SUM)
           if [ "${{ steps.run-matrix.outputs.content }}" = "${{ steps.read-repo-file.outputs.content }}" ]; then
-            echo "Files are identical"
+            echo "Files are identical. No changes to do"
             exit 0
           else
+            echo "::set-output name=md5_results::different"
             echo "Files are different"
             echo "Original ${{ steps.read-repo-file.outputs.content }}"
-            echo "Nuevo ${{ steps.run-matrix.outputs.content }}"
-            exit 1
+            echo "New ${{ steps.run-matrix.outputs.content }}"
           fi
       - name: Commit changes
-        if: steps.file-diff.outcome == 'failure'
+        if: steps.set-var.outputs.md5_results == 'different'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "actions-user"
           git add .
           git commit -m "[NEW_BUILD] New release via GitHub Action"
       - name: Push changes
-        if: steps.file-diff.outcome == 'failure'
+        if: steps.set-var.outputs.md5_results == 'different'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -11,6 +11,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Run if changes
+        working-directory: matrix
+        run: |
+          bash create_matrix.sh
+          bash update_dockerfile.sh
+
       - name: Check for changes
         id: file_changes
         run: |
@@ -21,13 +27,6 @@ jobs:
             echo "Changes detected in the file."
             echo "::set-output name=changed::true"
           fi
-
-      - name: Run if changes
-        if: steps.file_changes.outputs.changed == 'true'
-        working-directory: matrix
-        run: |
-          bash create_matrix.sh
-          bash update_dockerfile.sh
 
       - name: Commit changes
         if: steps.file_changes.outputs.changed == 'true'

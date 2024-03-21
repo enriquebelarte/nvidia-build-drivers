@@ -21,7 +21,7 @@ spec:
   - name: git-url
     value: '{{source_url}}'
   - name: output-image
-    value: quay.io/ebelarte/nvidia-build-drivers:535.129.03-5.14.0-284.51.1.el9_2
+    value: quay.io/ebelarte/nvidia-build-drivers:535.104.12-5.14.0-284.51.1.el9_2
   - name: path-context
     value: .
   - name: revision

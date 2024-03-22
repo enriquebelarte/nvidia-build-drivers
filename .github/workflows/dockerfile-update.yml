@@ -19,15 +19,14 @@ jobs:
         run: |
           bash create_matrix.sh
           echo "md5_live=$(cat drivers_matrix.MD5SUM)" >> "$GITHUB_ENV"
-      - name: Show differences
+      - name: Check changes at MD5 files 
         id: show-diffs
         run: |
-
           echo "MD5 REPO:"
           printf '%s\n' "$md5_repo" 
           echo "MD5 LIVE:"
           printf '%s\n' "$md5_live" 
-      - name: Commit changes
+      - name: Commit changes if there are new versions
         run: |
           if [ "$md5_repo" != "$md5_live" ]; then
             echo "md5_changed=true" >> "$GITHUB_ENV"

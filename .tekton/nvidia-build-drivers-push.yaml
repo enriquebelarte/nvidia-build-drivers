@@ -193,28 +193,6 @@ spec:
       workspaces:
       - name: source
         workspace: workspace
-    - name: extract-dtk-args
-      params:
-      - name: dockerfilePath
-        value: $(params.dockerfile)  
-      runAfter:
-      - clone-repository
-      taskRef:
-        resolver: git
-        params:
-        - name: name
-          value: extract-dtk-args 
-        - name: kind
-          value: task
-        - name: url
-          value: https://github.com/enriquebelarte/nvidia-build-drivers.git
-        - name: revision
-          value: main
-        - name: pathInRepo
-          value: .tekton/get-docker-params.yaml
-        workspaces:
-        - name: source
-          workspace: workspace
     - name: build-container
       params:
       - name: IMAGE

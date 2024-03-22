@@ -124,6 +124,7 @@
           "x86_64": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-x86_64-535.54.03.run",
           "aarch64": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-aarch64-535.54.03.run",
           "ppc64le": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-ppc64le-535.54.03.run"
+	}
         },
       {
         "release_version": "535.161.08",
@@ -138,8 +139,9 @@
           "x86_64": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-x86_64-535.161.08.run",
           "aarch64": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-aarch64-535.161.08.run",
           "ppc64le": "https://us.download.nvidia.com/tesla/535.54.03/NVIDIA-Linux-ppc64le-535.161.08.run"
-        }	
+        }
       }
-    ]      
+    ]    
   }
 }
+

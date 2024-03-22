@@ -55,7 +55,7 @@ for release in $(echo "${release_matrix}" | jq -c '.[]'); do
 done
 
 # Check if any entry has "published":"n" if not just exit
-if ! echo "$(<tmp_matrix)" | jq 'map(select(.published == "n")) | any' | grep -q true; then
+if ! echo "$(<tmp_matrix)" | jq -sc '.' | jq 'map(select(.published == "n")) | any' | grep -q true; then
     echo "No versions found at matrix to be built. All published yet."
     rm tmp_matrix
     exit 0

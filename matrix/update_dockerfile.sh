@@ -15,14 +15,18 @@ update_dockerfile(){
     sed -i "s|ARG DRIVER_VERSION='[^']*'|ARG DRIVER_VERSION='${release_version}'|g" "$dockerfile"
 }
 
+# Function to update pipelineRun with image matching above results
+# Will change the value after the first match for output-image
+pipelinerun_file="../.tekton/nvidia-build-drivers-push.yaml"
+registry_repo="quay.io/ebelarte/nvidia-build-drivers"
+
 update_pipelinerun(){
-pr_file="../.tekton/nvidia-build-drivers-push.yaml"
-output_container="nvidia-build-drivers"
-existing_version=$(grep -A1 "name: output-image" "$pr_file" | awk -v output_container="$output_container" -F: 'NR==2 && $0 ~ $output_container {print $3}')
-new_version="$release_version-$kernel_version"
-sed -i "s/$existing_version/$new_version/g" $pr_file
+	new_image="$registry_repo:$release_version-$kernel_version"
+        output_image_line=$(grep -m1 -n "output-image" "$pipelinerun_file" | cut -d: -f1)
+        value_line_number=$((output_image_line + 1))
+        sed -i "${value_line_number}s|value:.*|value: $new_image|" "$pipelinerun_file"
 }
 
-# Run the function
+# Run the functions
 update_dockerfile "drivers_matrix.json" "../Dockerfile"
 update_pipelinerun

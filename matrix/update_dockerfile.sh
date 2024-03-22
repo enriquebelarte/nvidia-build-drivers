@@ -25,6 +25,8 @@ update_pipelinerun(){
         output_image_line=$(grep -m1 -n "output-image" "$pipelinerun_file" | cut -d: -f1)
         value_line_number=$((output_image_line + 1))
         sed -i "${value_line_number}s|value:.*|value: $new_image|" "$pipelinerun_file"
+	ts=$(date +"%Y-%m-%d %H:%M:%S")
+	echo "$ts - New trigger build for $new_image" >> builds.log
 }
 
 # Run the functions

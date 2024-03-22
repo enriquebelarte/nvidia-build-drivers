@@ -54,8 +54,17 @@ for release in $(echo "${release_matrix}" | jq -c '.[]'); do
     echo "$modified_release_info" >> tmp_matrix
 done
 
-# Format a whole JSON for later process 
-cat tmp_matrix | jq -sc '.' > drivers_matrix.json
-md5sum drivers_matrix.json > drivers_matrix.MD5SUM
-rm tmp_matrix
+# Check if any entry has "published":"n" if not just exit
+if ! echo "$(<tmp_matrix)" | jq 'map(select(.published == "n")) | any' | grep -q true; then
+    echo "No versions found at matrix to be built. All published yet."
+    rm tmp_matrix
+    exit 0
+else
+# Format a whole JSON for later process and call script for Dockerfile and pipelineRun changes
+    echo "New versions found at matrix. Running build pipeline."
+    cat tmp_matrix | jq -sc '.' > drivers_matrix.json
+    md5sum drivers_matrix.json > drivers_matrix.MD5SUM
+    rm tmp_matrix
+    source update_dockerfile.sh
+fi
 

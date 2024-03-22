@@ -18,7 +18,6 @@ jobs:
         working-directory: matrix
         run: |
           bash create_matrix.sh
-          bash update_dockerfile.sh
           echo "md5_live=$(cat drivers_matrix.MD5SUM)" >> "$GITHUB_ENV"
       - name: Show differences
         id: show-diffs
